@@ -2,9 +2,10 @@ const axios = require("axios");
 const cheerio = require("cheerio");
 const fs = require("fs");
 
-const cookies = "YOUR_COOKIES_HERE";
-const userID = "YOUR_USER_ID_HERE";
-const BASE_URL = `https://movie.douban.com/people/${userID}/collect?start=`;
+const COOKIES = "YOUR_COOKIES_HERE";
+const USER_ID = "YOUR_USER_ID_HERE";
+
+const BASE_URL = `https://movie.douban.com/people/${USER_ID}/collect?start=`;
 const ITEMS_PER_PAGE = 15;
 
 const headers = {
@@ -18,7 +19,7 @@ const headers = {
 
 async function getTotalPages() {
   const response = await axios.get(BASE_URL + "0", {
-    headers: { ...headers, Cookie: cookies },
+    headers: { ...headers, Cookie: COOKIES },
   });
 
   const $ = cheerio.load(response.data);
@@ -35,7 +36,7 @@ function saveMoviesToFile(movies) {
 
 async function extractMoviesFromPage(pageNumber) {
   const response = await axios.get(BASE_URL + pageNumber * ITEMS_PER_PAGE, {
-    headers: { ...headers, Cookie: cookies },
+    headers: { ...headers, Cookie: COOKIES },
   });
   const $ = cheerio.load(response.data);
   const movies = [];
